@@ -1,37 +1,48 @@
 ---
 # tasks file for ansible-role-wordpress_hosted
 
-- include_vars: "{{ ansible_os_family }}.yml"
+- name: Download latest WordPress
+  get_url:
+    url: "{{ wordpress_hosted_download_url }}{{wordpress_hosted_download_filename }}"
+    mode: 0640
+    dest: "{{ wordpress_hosted_root_dir }}"
+  register: __register_get_url_wordpress
 
-- include: "install-{{ ansible_os_family }}.yml"
-
-- name: Create log directory
+- name: Ensure wordpress_hosted_document_root exists
   file:
-    path: "{{ wordpress_hosted_log_dir }}"
-    mode: 0755
-    owner: "{{ wordpress_hosted_user }}"
-    group: "{{ wordpress_hosted_group }}"
     state: directory
-  notify: Restart wordpress_hosted
+    path: "{{ wordpress_hosted_document_root }}"
+    mode: 0755
 
-- name: Create db directory
+- name: Ensure wordpress_hosted_app_root exists
   file:
-    path: "{{ wordpress_hosted_db_dir }}"
-    mode: 0755
-    owner: "{{ wordpress_hosted_user }}"
-    group: "{{ wordpress_hosted_group }}"
     state: directory
-  notify: Restart wordpress_hosted
+    path: "{{ wordpress_hosted_app_root }}"
+    mode: 0755
 
-- name: Create wordpress_hosted.conf
+- name: Extract WordPress with unarchive
+  unarchive:
+    dest: "{{ wordpress_hosted_app_root }}"
+    src: "{{ __register_get_url_wordpress.dest }}"
+    creates: "{{ wordpress_hosted_app_root }}/wp-config-sample.php"
+    extra_opts:
+      - --transform
+      - s/^wordpress//
+  when:
+    - ansible_os_family != 'FreeBSD'
+
+- name: Extract WordPress with BSD tar
+  shell: "tar -zxf {{ __register_get_url_wordpress.dest }} -C {{ wordpress_hosted_app_root }} -s '/^wordpress//'"
+  args:
+    creates: "{{ wordpress_hosted_app_root }}/wp-config-sample.php"
+  when:
+    - ansible_os_family == 'FreeBSD'
+
+- name: Install plugins
+  include_tasks: plugins.yml
+
+- name: Create wp-config.php
   template:
-    src: wordpress_hosted.conf.j2
-    dest: "{{ wordpress_hosted_conf_file }}"
-    validate: echo %s
-  notify: Restart wordpress_hosted
-
-- name: Start wordpress_hosted
-  service:
-    name: "{{ wordpress_hosted_service }}"
-    enabled: true
-    state: started
+    src: wp-config.php.j2
+    dest: "{{ wordpress_hosted_app_root }}/wp-config.php"
+    #validate: php -l %s

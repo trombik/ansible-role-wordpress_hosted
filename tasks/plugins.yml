@@ -1,0 +1,57 @@
+---
+
+- name: Download plugins with version
+  get_url:
+    url: "{{ wordpress_hosted_plugins_download_url }}{{ item.name }}.{{ item.version }}.zip"
+    dest: "{{ wordpress_hosted_root_dir }}"
+  with_items: "{{ wordpress_hosted_plugins }}"
+  when:
+    - item.version is defined
+  register: __register_get_url_plugins_with_version
+
+- name: Download plugins without version
+  get_url:
+    url: "{{ wordpress_hosted_plugins_download_url }}{{ item.name }}.zip"
+    dest: "{{ wordpress_hosted_root_dir }}"
+  with_items: "{{ wordpress_hosted_plugins }}"
+  when:
+    - item.version is not defined
+  register: __register_get_url_plugins_without_version
+
+- name: Extract plugins without version
+  unarchive:
+    dest: "{{ wordpress_hosted_plugin_dir }}"
+    src: "{{ item.dest }}"
+    creates: "{{ wordpress_hosted_plugin_dir }}/{{ item.item.name }}"
+  with_items: "{{ __register_get_url_plugins_without_version.results }}"
+  when:
+    - ansible_os_family != 'FreeBSD'
+    - item.item.version is not defined
+
+- name: Extract plugins without version with unzip
+  shell: "unzip -d {{ wordpress_hosted_plugin_dir }} {{ item.dest }}"
+  args:
+    creates: "{{ wordpress_hosted_plugin_dir }}/{{ item.item.name }}"
+  with_items: "{{ __register_get_url_plugins_without_version.results }}"
+  when:
+    - ansible_os_family == 'FreeBSD'
+    - item.item.version is not defined
+
+- name: Extract plugins with version
+  unarchive:
+    dest: "{{ wordpress_hosted_plugin_dir }}"
+    src: "{{ item.dest }}"
+    creates: "{{ wordpress_hosted_plugin_dir }}/{{ item.item.name }}"
+  with_items: "{{ __register_get_url_plugins_with_version.results }}"
+  when:
+    - ansible_os_family != 'FreeBSD'
+    - item.item.version is defined
+
+- name: Extract plugins with version with unzip
+  shell: "unzip -d {{ wordpress_hosted_plugin_dir }} {{ item.dest }}"
+  args:
+    creates: "{{ wordpress_hosted_plugin_dir }}/{{ item.item.name }}"
+  with_items: "{{ __register_get_url_plugins_with_version.results }}"
+  when:
+    - ansible_os_family == 'FreeBSD'
+    - item.item.version is defined

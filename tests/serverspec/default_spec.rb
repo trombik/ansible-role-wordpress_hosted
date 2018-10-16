@@ -1,9 +1,7 @@
 require "spec_helper"
 require "serverspec"
 
-package = "wordpress_hosted"
-service = "wordpress_hosted"
-config  = "/etc/wordpress_hosted/wordpress_hosted.conf"
+config  = "/home/vagrant/"
 user    = "wordpress_hosted"
 group   = "wordpress_hosted"
 ports   = [PORTS]

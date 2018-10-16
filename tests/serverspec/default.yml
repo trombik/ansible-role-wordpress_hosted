@@ -1,5 +1,27 @@
 - hosts: localhost
+  pre_tasks:
+    - pkgng:
+        name: gtar
+        state: present
+      become_user: root
+      become: yes
+    - apt:
+        name: unzip
+        state: present
+      become_user: root
+      become: yes
+      when:
+        - ansible_os_family == 'Debian'
   roles:
     - ansible-role-wordpress_hosted
   vars:
-    wordpress_hosted_config: ""
+    wordpress_hosted_wp_config: {}
+    wordpress_hosted_security_keys:
+      AUTH_KEY: AUTH_KEY
+      SECURE_AUTH_KEY: SECURE_AUTH_KEY
+      LOGGED_IN_KEY: LOGGED_IN_KEY
+      NONCE_KEY: NONCE_KEY
+    wordpress_hosted_plugins:
+      - name: code-snippets
+      - name: dark-mode
+        version: 3.0.1

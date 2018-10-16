@@ -12,6 +12,7 @@ provisioner:
   require_ruby_for_busser: false
   ansible_verbosity: 1
   ansible_verbose: true
+  ansible_sudo: false
   ansible_extra_flags: <%= ENV['ANSIBLE_EXTRA_FLAGS'] %>
   # requirements_path: requirements.yml
   http_proxy: <%= ENV['ANSIBLE_PROXY'] %>
@@ -31,6 +32,11 @@ platforms:
     provisioner:
       extra_vars:
         ansible_python_interpreter: '/usr/local/bin/python'
+
+  - name: ubuntu-18.04-amd64
+    driver:
+      box: trombik/ansible-ubuntu-18.04-amd64
+      box_check_update: false
 
 suites:
   - name: default

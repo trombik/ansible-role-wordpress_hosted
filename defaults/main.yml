@@ -1,8 +1,20 @@
-wordpress_hosted_user: wordpress_hosted
-wordpress_hosted_group: wordpress_hosted
-wordpress_hosted_log_dir: /var/log/wordpress_hosted
-wordpress_hosted_db_dir: "{{ __wordpress_hosted_db_dir }}"
-wordpress_hosted_service: wordpress_hosted
-wordpress_hosted_conf_dir: "{{ __wordpress_hosted_conf_dir }}"
-wordpress_hosted_conf_file: "{{ __wordpress_hosted_conf_dir }}/wordpress_hosted.conf"
-wordpress_hosted_flags: ""
+wordpress_hosted_db_name: wordpress
+wordpress_hosted_db_host: localhost
+wordpress_hosted_db_port: 3306
+wordpress_hosted_db_user: wordpress
+wordpress_hosted_db_password:
+wordpress_hosted_security_keys: {}
+
+wordpress_hosted_download_url: https://wordpress.org/
+wordpress_hosted_download_filename: latest.tar.gz
+wordpress_hosted_plugins_download_url: "https://downloads.wordpress.org/plugin/"
+wordpress_hosted_root_dir: "{{ ansible_user_dir }}"
+wordpress_hosted_document_root: "{{ ansible_user_dir }}/web"
+wordpress_hosted_app_root: "{{ wordpress_hosted_document_root }}/wp"
+wordpress_hosted_plugin_dir: "{{ wordpress_hosted_app_root }}/wp-content/plugins"
+
+# https://codex.wordpress.org/Editing_wp-config.php
+wordpress_hosted_wp_config: {}
+
+wordpress_hosted_plugins: []
+wordpress_hosted_themes: []
