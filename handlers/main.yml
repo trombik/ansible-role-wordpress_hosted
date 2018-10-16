@@ -1,0 +1,6 @@
+---
+
+- name: Restart wordpress_hosted
+  service:
+    name: wordpress_hosted
+    state: restarted

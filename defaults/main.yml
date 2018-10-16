@@ -1,0 +1,8 @@
+wordpress_hosted_user: wordpress_hosted
+wordpress_hosted_group: wordpress_hosted
+wordpress_hosted_log_dir: /var/log/wordpress_hosted
+wordpress_hosted_db_dir: "{{ __wordpress_hosted_db_dir }}"
+wordpress_hosted_service: wordpress_hosted
+wordpress_hosted_conf_dir: "{{ __wordpress_hosted_conf_dir }}"
+wordpress_hosted_conf_file: "{{ __wordpress_hosted_conf_dir }}/wordpress_hosted.conf"
+wordpress_hosted_flags: ""

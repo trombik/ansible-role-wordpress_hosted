@@ -1,0 +1,6 @@
+---
+
+- name: Install wordpress_hosted
+  pkgng:
+    name: wordpress_hosted
+    state: present

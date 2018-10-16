@@ -1,0 +1,5 @@
+- hosts: localhost
+  roles:
+    - ansible-role-wordpress_hosted
+  vars:
+    wordpress_hosted_config: ""
