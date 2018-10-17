@@ -1,20 +1,22 @@
 <?php
 // Managed by ansible
 
+/** Absolute path to the WordPress directory. */
+if ( !defined('ABSPATH') )
+  define('ABSPATH', '{{ wordpress_hosted_app_root }}');
+
 define( 'DB_NAME', '{{ wordpress_hosted_db_name }}' );
 define( 'DB_USER', '{{ wordpress_hosted_db_user }}' );
 define( 'DB_PASSWORD', '{{ wordpress_hosted_db_password }}' );
 define( 'DB_HOST', '{{ wordpress_hosted_db_host }}' );
 
 {% for k, v in wordpress_hosted_wp_config | dictsort() %}
-define( '{{ k }}', {{ v }} );
+define( '{{ k }}', '{{ v }}' );
 {% endfor %}
 
-$table_prefix  = '{{ wordpress_hosted_wp_config_table_prefix }}';
+{{ wordpress_hosted_wp_config_raw }}
 
-/** Absolute path to the WordPress directory. */
-if ( !defined('ABSPATH') )
-  define('ABSPATH', '{{ wordpress_hosted_app_root }}');
+$table_prefix  = '{{ wordpress_hosted_wp_config_table_prefix }}';
 
 include (ABSPATH . 'wp-salts.php');
 

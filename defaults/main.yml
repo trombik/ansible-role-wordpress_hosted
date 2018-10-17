@@ -14,6 +14,7 @@ wordpress_hosted_distfiles_dir: "{{ wordpress_hosted_root_dir }}/distfiles"
 
 # https://codex.wordpress.org/Editing_wp-config.php
 wordpress_hosted_wp_config: {}
+wordpress_hosted_wp_config_raw: ""
 wordpress_hosted_wp_config_filemode: 0440
 wordpress_hosted_wp_config_table_prefix: wp_
 wordpress_hosted_salt_api_url: https://api.wordpress.org/secret-key/1.1/salt/

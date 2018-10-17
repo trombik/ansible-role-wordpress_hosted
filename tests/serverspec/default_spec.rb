@@ -34,7 +34,9 @@ describe file(config) do
   it { should be_mode 440 }
   its(:content) { should match(%r{^// Managed by ansible}) }
   its(:content) { should match(/^define\(\s*'DB_PASSWORD', 'PassWord'\s*\);/) }
+  its(:content) { should match(/^define\(\s*'WP_MEMORY_LIMIT', '256M'\s*\);/) }
   its(:content) { should match(/^\$table_prefix\s*=\s*'wp1_';$/) }
+  its(:content) { should match(/^define\(\s*'FOO', 'BAR'\s*\);/) }
 end
 
 describe file salts_file do

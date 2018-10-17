@@ -20,7 +20,10 @@
     wordpress_hosted_document_root: "{{ ansible_user_dir }}/web"
     wordpress_hosted_app_root: "{{ wordpress_hosted_document_root }}"
     wordpress_hosted_db_password: PassWord
-    wordpress_hosted_wp_config: {}
+    wordpress_hosted_wp_config:
+      WP_MEMORY_LIMIT: 256M
+    wordpress_hosted_wp_config_raw: |
+      define('FOO', 'BAR');
     wordpress_hosted_wp_config_table_prefix: wp1_
     wordpress_hosted_plugins:
       - name: code-snippets
