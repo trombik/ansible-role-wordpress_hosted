@@ -34,15 +34,6 @@
     extra_opts:
       - --transform
       - s/^wordpress//
-  when:
-    - ansible_os_family != 'FreeBSD'
-
-- name: Extract WordPress with BSD tar
-  shell: "tar -zxf {{ __register_get_url_wordpress.dest }} -C {{ wordpress_hosted_app_root }} -s '/^wordpress//'"
-  args:
-    creates: "{{ wordpress_hosted_app_root }}/wp-config-sample.php"
-  when:
-    - ansible_os_family == 'FreeBSD'
 
 - name: Include wp_salts.yml
   include_tasks: wp_salts.yml

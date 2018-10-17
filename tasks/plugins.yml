@@ -27,16 +27,6 @@
     creates: "{{ wordpress_hosted_plugin_dir }}/{{ item.item.name }}"
   with_items: "{{ __register_get_url_plugins_without_version.results }}"
   when:
-    - ansible_os_family != 'FreeBSD'
-    - item.item.version is not defined
-
-- name: Extract plugins without version with unzip
-  shell: "unzip -d {{ wordpress_hosted_plugin_dir }} {{ item.dest }}"
-  args:
-    creates: "{{ wordpress_hosted_plugin_dir }}/{{ item.item.name }}"
-  with_items: "{{ __register_get_url_plugins_without_version.results }}"
-  when:
-    - ansible_os_family == 'FreeBSD'
     - item.item.version is not defined
 
 - name: Extract plugins with version
@@ -46,14 +36,4 @@
     creates: "{{ wordpress_hosted_plugin_dir }}/{{ item.item.name }}"
   with_items: "{{ __register_get_url_plugins_with_version.results }}"
   when:
-    - ansible_os_family != 'FreeBSD'
-    - item.item.version is defined
-
-- name: Extract plugins with version with unzip
-  shell: "unzip -d {{ wordpress_hosted_plugin_dir }} {{ item.dest }}"
-  args:
-    creates: "{{ wordpress_hosted_plugin_dir }}/{{ item.item.name }}"
-  with_items: "{{ __register_get_url_plugins_with_version.results }}"
-  when:
-    - ansible_os_family == 'FreeBSD'
     - item.item.version is defined
