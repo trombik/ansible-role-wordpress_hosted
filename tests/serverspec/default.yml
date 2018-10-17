@@ -5,6 +5,8 @@
         state: present
       become_user: root
       become: yes
+      when:
+        - ansible_os_family == 'FreeBSD'
     - apt:
         name: unzip
         state: present
@@ -15,6 +17,9 @@
   roles:
     - ansible-role-wordpress_hosted
   vars:
+    wordpress_hosted_document_root: "{{ ansible_user_dir }}/web"
+    wordpress_hosted_app_root: "{{ wordpress_hosted_document_root }}"
+    wordpress_hosted_db_password: PassWord
     wordpress_hosted_wp_config: {}
     wordpress_hosted_security_keys:
       AUTH_KEY: AUTH_KEY

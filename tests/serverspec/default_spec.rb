@@ -1,56 +1,48 @@
 require "spec_helper"
 require "serverspec"
 
-config  = "/home/vagrant/"
-user    = "wordpress_hosted"
-group   = "wordpress_hosted"
-ports   = [PORTS]
-log_dir = "/var/log/wordpress_hosted"
-db_dir  = "/var/lib/wordpress_hosted"
-
-case os[:family]
-when "freebsd"
-  config = "/usr/local/etc/wordpress_hosted.conf"
-  db_dir = "/var/db/wordpress_hosted"
-end
-
-describe package(package) do
-  it { should be_installed }
-end
+user = "vagrant"
+group = "vagrant"
+home = "/home/#{user}"
+document_root = "#{home}/web"
+app_root = "#{document_root}"
+plugin_dir = "#{app_root}/wp-content/plugins"
+config  = "#{app_root}/wp-config.php"
+plugins = [
+  { name: "code-snippets" },
+  { name: "dark-mode", version: "3.0.1" }
+]
+distfile_dir = "#{home}"
 
 describe file(config) do
+  it { should exist }
   it { should be_file }
-  its(:content) { should match Regexp.escape("wordpress_hosted") }
-end
-
-describe file(log_dir) do
-  it { should exist }
-  it { should be_mode 755 }
   it { should be_owned_by user }
   it { should be_grouped_into group }
+  it { should be_mode 440 }
+  its(:content) { should match(/^\/\/ Managed by ansible/) }
+  its(:content) { should match(/^define\(\s*'DB_PASSWORD', 'PassWord'\s*\);/) }
 end
 
-describe file(db_dir) do
-  it { should exist }
-  it { should be_mode 755 }
-  it { should be_owned_by user }
-  it { should be_grouped_into group }
-end
-
-case os[:family]
-when "freebsd"
-  describe file("/etc/rc.conf.d/wordpress_hosted") do
+plugins.each do |p|
+  archive_file = if p.key?(:version)
+                   "#{distfile_dir}/#{p[:name]}.#{p[:version]}.zip"
+                 else
+                   "#{distfile_dir}/#{p[:name]}.zip"
+                 end
+  describe file archive_file do
+    it { should exist }
     it { should be_file }
+    it { should be_owned_by user }
+    it { should be_grouped_into group }
+    it { should be_mode 640 }
   end
-end
 
-describe service(service) do
-  it { should be_running }
-  it { should be_enabled }
-end
-
-ports.each do |p|
-  describe port(p) do
-    it { should be_listening }
+  describe file "#{plugin_dir}/#{p[:name]}/#{p[:name]}.php" do
+    it { should exist }
+    it { should be_file }
+    it { should be_owned_by user }
+    it { should be_grouped_into group }
+    it { should be_mode 644 }
   end
 end
