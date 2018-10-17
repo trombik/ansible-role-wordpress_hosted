@@ -3,7 +3,7 @@
 - name: Download plugins with version
   get_url:
     url: "{{ wordpress_hosted_plugins_download_url }}{{ item.name }}.{{ item.version }}.zip"
-    dest: "{{ wordpress_hosted_root_dir }}"
+    dest: "{{ wordpress_hosted_distfiles_dir }}"
     mode: 0640
   with_items: "{{ wordpress_hosted_plugins }}"
   when:
@@ -13,7 +13,7 @@
 - name: Download plugins without version
   get_url:
     url: "{{ wordpress_hosted_plugins_download_url }}{{ item.name }}.zip"
-    dest: "{{ wordpress_hosted_root_dir }}"
+    dest: "{{ wordpress_hosted_distfiles_dir }}"
     mode: 0640
   with_items: "{{ wordpress_hosted_plugins }}"
   when:

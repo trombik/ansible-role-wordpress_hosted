@@ -14,7 +14,17 @@ plugins = [
   { name: "code-snippets" },
   { name: "dark-mode", version: "3.0.1" }
 ]
-distfile_dir = home.to_s
+distfile_dir = "#{home}/distfiles"
+
+[ document_root, app_root, plugin_dir, distfile_dir ].each do |d|
+  describe file d do
+    it { should exist }
+    it { should be_directory }
+    it { should be_owned_by user }
+    it { should be_grouped_into group }
+    it { should be_mode 755 }
+  end
+end
 
 describe file(config) do
   it { should exist }

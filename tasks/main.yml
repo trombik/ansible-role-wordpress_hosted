@@ -1,11 +1,17 @@
 ---
 # tasks file for ansible-role-wordpress_hosted
 
+- name: Ensure wordpress_hosted_distfiles_dir exists
+  file:
+    state: directory
+    path: "{{ wordpress_hosted_distfiles_dir }}"
+    mode: 0755
+
 - name: Download latest WordPress
   get_url:
     url: "{{ wordpress_hosted_download_url }}{{wordpress_hosted_download_filename }}"
     mode: 0640
-    dest: "{{ wordpress_hosted_root_dir }}"
+    dest: "{{ wordpress_hosted_distfiles_dir }}"
   register: __register_get_url_wordpress
 
 - name: Ensure wordpress_hosted_document_root exists
