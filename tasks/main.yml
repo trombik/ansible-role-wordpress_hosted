@@ -45,4 +45,5 @@
   template:
     src: wp-config.php.j2
     dest: "{{ wordpress_hosted_app_root }}/wp-config.php"
+    mode: "{{ wordpress_hosted_wp_config_filemode }}"
     #validate: php -l %s

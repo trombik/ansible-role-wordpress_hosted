@@ -9,12 +9,13 @@ wordpress_hosted_download_url: https://wordpress.org/
 wordpress_hosted_download_filename: latest.tar.gz
 wordpress_hosted_plugins_download_url: "https://downloads.wordpress.org/plugin/"
 wordpress_hosted_root_dir: "{{ ansible_user_dir }}"
-wordpress_hosted_document_root: "{{ ansible_user_dir }}/web"
-wordpress_hosted_app_root: "{{ wordpress_hosted_document_root }}/wp"
+wordpress_hosted_document_root: "{{ ansible_user_dir }}/publi_html"
+wordpress_hosted_app_root: "{{ wordpress_hosted_document_root }}/wordpress"
 wordpress_hosted_plugin_dir: "{{ wordpress_hosted_app_root }}/wp-content/plugins"
 
 # https://codex.wordpress.org/Editing_wp-config.php
 wordpress_hosted_wp_config: {}
+wordpress_hosted_wp_config_filemode: 0440
 
 wordpress_hosted_plugins: []
 wordpress_hosted_themes: []
