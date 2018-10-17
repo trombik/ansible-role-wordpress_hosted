@@ -51,20 +51,18 @@ None
 ```yaml
 - hosts: localhost
   pre_tasks:
-    - pkgng:
+    - package:
         name: gtar
         state: present
       become_user: root
       become: yes
       when:
         - ansible_os_family == 'FreeBSD'
-    - apt:
+    - package:
         name: unzip
         state: present
       become_user: root
       become: yes
-      when:
-        - ansible_os_family == 'Debian'
   roles:
     - ansible-role-wordpress_hosted
   vars:
