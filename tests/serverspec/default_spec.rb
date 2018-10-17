@@ -5,16 +5,16 @@ user = "vagrant"
 group = "vagrant"
 home = "/home/#{user}"
 document_root = "#{home}/web"
-app_root = "#{document_root}"
+app_root = document_root.to_s
 plugin_dir = "#{app_root}/wp-content/plugins"
-config  = "#{app_root}/wp-config.php"
+config = "#{app_root}/wp-config.php"
 salts_file = "#{app_root}/wp-salts.php"
 
 plugins = [
   { name: "code-snippets" },
   { name: "dark-mode", version: "3.0.1" }
 ]
-distfile_dir = "#{home}"
+distfile_dir = home.to_s
 
 describe file(config) do
   it { should exist }
@@ -22,7 +22,7 @@ describe file(config) do
   it { should be_owned_by user }
   it { should be_grouped_into group }
   it { should be_mode 440 }
-  its(:content) { should match(/^\/\/ Managed by ansible/) }
+  its(:content) { should match(%r{^// Managed by ansible}) }
   its(:content) { should match(/^define\(\s*'DB_PASSWORD', 'PassWord'\s*\);/) }
   its(:content) { should match(/^\$table_prefix\s*=\s*'wp1_';$/) }
 end
@@ -32,7 +32,7 @@ describe file salts_file do
   it { should be_owned_by user }
   it { should be_grouped_into group }
   it { should be_mode 440 }
-  %w[ AUTH_KEY SECURE_AUTH_KEY LOGGED_IN_KEY NONCE_KEY AUTH_SALT SECURE_AUTH_SALT LOGGED_IN_SALT NONCE_SALT ].each do |salt|
+  %w[AUTH_KEY SECURE_AUTH_KEY LOGGED_IN_KEY NONCE_KEY AUTH_SALT SECURE_AUTH_SALT LOGGED_IN_SALT NONCE_SALT].each do |salt|
     its(:content) { should match(/^define\('#{salt}',\s*'[^']+'\)/) }
   end
 end
