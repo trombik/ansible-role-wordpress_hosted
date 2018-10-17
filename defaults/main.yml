@@ -1,6 +1,5 @@
 wordpress_hosted_db_name: wordpress
-wordpress_hosted_db_host: localhost
-wordpress_hosted_db_port: 3306
+wordpress_hosted_db_host: localhost:3306
 wordpress_hosted_db_user: wordpress
 wordpress_hosted_db_password:
 
