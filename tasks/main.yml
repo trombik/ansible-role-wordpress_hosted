@@ -38,6 +38,9 @@
   when:
     - ansible_os_family == 'FreeBSD'
 
+- name: Include wp_salts.yml
+  include_tasks: wp_salts.yml
+
 - name: Install plugins
   include_tasks: plugins.yml
 

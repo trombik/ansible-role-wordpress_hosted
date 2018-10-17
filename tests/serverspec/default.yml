@@ -21,11 +21,7 @@
     wordpress_hosted_app_root: "{{ wordpress_hosted_document_root }}"
     wordpress_hosted_db_password: PassWord
     wordpress_hosted_wp_config: {}
-    wordpress_hosted_security_keys:
-      AUTH_KEY: AUTH_KEY
-      SECURE_AUTH_KEY: SECURE_AUTH_KEY
-      LOGGED_IN_KEY: LOGGED_IN_KEY
-      NONCE_KEY: NONCE_KEY
+    wordpress_hosted_wp_config_table_prefix: wp1_
     wordpress_hosted_plugins:
       - name: code-snippets
       - name: dark-mode

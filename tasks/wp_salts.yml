@@ -1,0 +1,28 @@
+---
+
+- name: Check if wp-salts.php exists
+  stat:
+    path: "{{ wordpress_hosted_wp_salts_file }}"
+  register: __regsister_wp_salts_php
+
+- name: Create wp-salts.php
+  when: not __regsister_wp_salts_php.stat.exists
+  block:
+    - name: Download salts from remote API
+      get_url:
+        url: "{{ wordpress_hosted_salt_api_url }}"
+        dest: "{{ wordpress_hosted_wp_salts_file }}"
+        force: false
+        mode: "{{ wordpress_hosted_wp_config_filemode }}"
+    - name: Add PHP start tag to wp-salts.php
+      lineinfile:
+        dest: "{{ wordpress_hosted_wp_salts_file }}"
+        line: "<?php"
+        state: present
+        insertbefore: BOF
+    - name: Add PHP end tag to wp-salts.php
+      lineinfile:
+        dest: "{{ wordpress_hosted_wp_salts_file }}"
+        line: "?>"
+        state: present
+        insertafter: EOF

@@ -1,3 +1,4 @@
+<?php
 // Managed by ansible
 
 define( 'DB_NAME', '{{ wordpress_hosted_db_name }}' );
@@ -5,12 +6,17 @@ define( 'DB_USER', '{{ wordpress_hosted_db_user }}' );
 define( 'DB_PASSWORD', '{{ wordpress_hosted_db_password }}' );
 define( 'DB_HOST', '{{ wordpress_hosted_db_host }}:{{ wordpress_hosted_db_port }}' );
 
-// https://github.com/bertvv/ansible-role-wordpress/blob/master/tasks/salt.yml
-define( 'AUTH_KEY',         '{{ wordpress_hosted_security_keys['AUTH_KEY'] }}' );
-define( 'SECURE_AUTH_KEY',  '{{ wordpress_hosted_security_keys['SECURE_AUTH_KEY'] }}' );
-define( 'LOGGED_IN_KEY',    '{{ wordpress_hosted_security_keys['LOGGED_IN_KEY'] }}' );
-define( 'NONCE_KEY',        '{{ wordpress_hosted_security_keys['NONCE_KEY'] }}' );
-
 {% for k, v in wordpress_hosted_wp_config | dictsort() %}
 define( '{{ k }}', {{ v }} );
 {% endfor %}
+
+$table_prefix  = '{{ wordpress_hosted_wp_config_table_prefix }}';
+
+/** Absolute path to the WordPress directory. */
+if ( !defined('ABSPATH') )
+  define('ABSPATH', '{{ wordpress_hosted_app_root }}');
+
+include (ABSPATH . 'wp-salts.php');
+
+/** Sets up WordPress vars and included files. */
+require_once(ABSPATH . 'wp-settings.php');
